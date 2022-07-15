@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    {% comment %} <div class="h5 mb-3"><b>Name: {{ quiz.name }}</b>
+        {% for question in quiz.get_questions %}
+            <div class="text-muted">
+                <ul><h3>{{forloop.counter }}</h3> <b>{{question.text}}</b>
+                    {% for answer in question.get_answers %}
+                        <li>{{ answer.text }}: <b>{{ answer.is_correct }}</b></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div> {% endcomment %}
+    <div class='row'>
+        <div class='col'>
+            <h2>{{quiz.name}}</h2>
+        </div>
+        <div class='col text-right' id='timer-box'>
+            {% if quiz.time > 0 %}
+                countdown
+            {% endif %}
+        </div>
+    </div>
+
+
+    <form id="quiz-form" method='POST' data-time='{{quiz.time}}'>
+        {% csrf_token %}
+
+        {% for question in quiz.get_questions %}
+            <hr>
+            <div class='mb-2'>
+            <b>Q{{forloop.counter}}  {{question.text}}</b>
+            </div>
+            {% for answer in question.get_answers %}
+                <div>
+                    <input type="radio" class="ans"  id="{{question.id}}-{{answer}}" value="{{answer}}" name="{{question.id}}">
+                    <label for="{{question.id}}">{{answer.text}}</label>
+                </div>
+            {% endfor %}
+            </hr>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+{% endblock body %}
+
+{% block footer %}
+    <script src=" {% static 'js/quiz.js' %} "></script>
+{% endblock %} 

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for quiz in object_list   %}
+        <div class="col">
+            <div class="card h-100">
+                {% if quiz.image %}
+                    <img src="{{ quiz.image.url }}" class="card-img-top" >
+                {% else %}
+                    <img src="{% static 'images/quiz1.jpg' %}" class="card-img-top" >
+                {% endif %}
+                <div class="card-body">
+                <h5 class="card-title">{{ quiz.name }}</h5>
+                <p class="card-text">Topic: {{ quiz.topic }}</p>
+                <small class="text-muted">Quiz questions: {{ quiz.get_questions.count }}</small>
+                </div>
+
+                <div class="card-footer">
+                <small class="text-muted">Uploaded at: {{ quiz.created_at }}</small>
+                {% comment %} {{quiz.id}} {% endcomment %}
+                <button type="button" 
+                    class="btn btn-link modal-button" 
+                    data-pk = "{{ quiz.id }}"
+                    data-quiz = "{{quiz.name}}"
+                    data-questions = "{{quiz.get_questions.count}}"
+                    data-difficulty = "{{quiz.type}}"
+                    data-pass = "{{quiz.max_score}}"
+                    data-time = "{{ quiz.time }}"
+                    data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Start 
+                  </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+<!-- Modal -->
+       <!-- Button trigger modal -->
+
+    <!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are you sure to start</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body-confirm">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <button type="button" id="start-button" class="btn btn-primary">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}
+{% block footer %}
+    <script src=" {% static 'js/main.js' %} "></script>
+{% endblock footer %}
